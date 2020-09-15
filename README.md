@@ -2,8 +2,8 @@
 ## Requirements 
 
 ```
-pytorch=0.3.1
-visdom=0.1.8.5
+pytorch==0.3.1
+visdom==0.1.8.5
 ```
 
 ## Introduction 
@@ -45,7 +45,7 @@ python -m visdom.server
 
 ### 1. Train the decomposition network G_Dec using DRR generated from LIDC-IDRI
 
-Because G_Dec is trained with range -1~1 but DecGAN IO implies 0~1, we should modify some preprocessing functions to train G_Dec. (I know it is dummy, it can be done better) I leave some noted in the following files:
+Because G_Dec is trained with range [-1, 1] but DecGAN IO implies [0, 1], we should modify some preprocessing functions to train G_Dec. (I know it is dummy, it can be done better) I leave some noted in the following files:
 
 - Comments out all the transformless related code (7 lines in total) in `./data/unaligned_dataset.py`
 - Change the visualization output in `./util/util.py/tensor2im`
