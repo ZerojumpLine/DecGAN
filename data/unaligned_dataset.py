@@ -44,6 +44,7 @@ class UnalignedDataset_test(BaseDataset):
         A = torch.FloatTensor(A_img) / 255.0
         B = torch.FloatTensor(B_img) / 255.0
 
+        # Comment out this 2 lines if you want to train G_Dec
         A = self.transformless(A)
         B = self.transformless(B)
 
@@ -138,6 +139,7 @@ class UnalignedDataset_Dec(BaseDataset):
         D = torch.FloatTensor(D_img) / 255.0
         E = torch.FloatTensor(E_img) / 255.0
 
+        # Comment out this 5 lines if you want to train G_Dec
         A = self.transformless(A)
         B = self.transformless(B)
         C = self.transformless(C)

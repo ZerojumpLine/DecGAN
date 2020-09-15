@@ -136,8 +136,8 @@ class Visualizer():
 
         for label, im_data in visuals.items():
             im = util.tensor2im(im_data)
-            # image_name = '%s_%s.png' % (name, label)
-            image_name = '%s.png' % (name)
+            image_name = '%s_%s.png' % (name, label)
+            # image_name = '%s.png' % (name)
             save_path = os.path.join(image_dir, image_name)
             h, w, _ = im.shape
             if aspect_ratio > 1.0:

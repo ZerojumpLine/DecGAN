@@ -87,20 +87,10 @@ class BaseModel():
                     net.load_state_dict(torch.load(save_path))
 					
     # load models from the disk
-    def load_networks_S_B(self, which_epoch):
+    def load_networks_G_Dec(self, which_epoch):
         save_filename = '%s.pth' % (which_epoch)
-        save_path = save_filename
-        net = getattr(self, 'net' + 'S_B')
-        if len(self.gpu_ids) > 0 and torch.cuda.is_available():
-            net.module.load_state_dict(torch.load(save_path))
-        else:
-            net.load_state_dict(torch.load(save_path))
-
-
-    def load_networks_S_Blung(self, which_epoch):
-        save_filename = '%s.pth' % (which_epoch)
-        save_path = save_filename
-        net = getattr(self, 'net' + 'S_Blung')
+        save_path = os.path.join(self.save_dir, save_filename)
+        net = getattr(self, 'net' + 'G_Dec')
         if len(self.gpu_ids) > 0 and torch.cuda.is_available():
             net.module.load_state_dict(torch.load(save_path))
         else:

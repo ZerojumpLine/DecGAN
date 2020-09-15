@@ -27,9 +27,9 @@ class CycleGANModel(BaseModel):
         self.visual_names = visual_names_A + visual_names_B
         # specify the models you want to save to the disk. The program will call base_model.save_networks and base_model.load_networks
         if self.isTrain:
-            self.model_names = ['G_A', 'G_B', 'D_A', 'D_B', 'D_Dec', 'S_B']
+            self.model_names = ['G_A', 'G_B', 'D_A', 'D_B', 'D_Dec', 'G_Dec']
         else:  # during test time, only load Gs
-            self.model_names = ['G_A', 'G_B', 'S_B']
+            self.model_names = ['G_A', 'G_B', 'G_Dec']
 
         # load/define networks
         # The naming conversion is different from those used in the paper
@@ -40,7 +40,7 @@ class CycleGANModel(BaseModel):
         self.netG_B = networks.define_G(3, opt.input_nc,
                                         opt.ngf, opt.which_model_netG, opt.norm, not opt.no_dropout, opt.init_type,
                                         self.gpu_ids)
-        self.netS_B = networks.define_G(opt.input_nc, 3,
+        self.netG_Dec = networks.define_G(opt.input_nc, 3,
                                         opt.ngf, 'unet_32', opt.norm, not opt.no_dropout, opt.init_type,
                                         self.gpu_ids)
 
@@ -80,9 +80,8 @@ class CycleGANModel(BaseModel):
         if not self.isTrain or opt.continue_train:
             self.load_networks(opt.which_epoch)
             # print('continue training!')
-        # initial S_B
-        # self.load_networks_S_B('latest_net_S_B')
-        # self.load_networks_S_Blung('latest_net_S_Blung')
+        # initial G_Dec
+        self.load_networks_G_Dec('latest_net_G_Dec')
         self.print_networks(opt.verbose)
 
     def set_input(self, input):
@@ -114,12 +113,12 @@ class CycleGANModel(BaseModel):
         self.real_B = Variable(self.input_B)
         self.real_Dec = Variable(self.input_X)
 
-    def test(self):
+    def test(self, alpha_bone, alpha_lung, alpha_other):
         self.real_A = Variable(self.input_A, volatile=True)
         self.fake_B = self.netG_A(self.real_A)
 
         self.prefake_B = (self.fake_B + 1.0) / 2.0
-        self.decA, self.decAc = self.netS_B(self.prefake_B)
+        self.decA, self.decAc = self.netG_Dec(self.prefake_B)
 
         self.decA_bone = self.decA[:, 0, :, :]
         self.decA_bone.contiguous()
@@ -148,9 +147,9 @@ class CycleGANModel(BaseModel):
         self.postdecAtp = torch.FloatTensor(self.postdecAtp)
         self.postdecAtp = self.postdecAtp.cuda(self.gpu_ids[0], async=True)
         self.postdecAtp = Variable(self.postdecAtp)
-        self.postdecAtp[:, 0, :, :] = self.postdecA * 1
-        self.postdecAtp[:, 1, :, :] = self.postdecAlung * 2
-        self.postdecAtp[:, 2, :, :] = self.postdecA_other * 1
+        self.postdecAtp[:, 0, :, :] = self.postdecA * alpha_bone
+        self.postdecAtp[:, 1, :, :] = self.postdecAlung * alpha_lung
+        self.postdecAtp[:, 2, :, :] = self.postdecA_other * alpha_other
 
         self.posrec_A = self.netG_B(self.postdecAtp)
         #
@@ -205,7 +204,7 @@ class CycleGANModel(BaseModel):
 
         # Forward cycle loss
         self.prefake_B = (self.fake_B + 1.0) / 2.0
-        self.decA, self.decAc = self.netS_B(self.prefake_B)
+        self.decA, self.decAc = self.netG_Dec(self.prefake_B)
 
         self.decA_bone = self.decA[:, 0, :, :]
         self.decA_bone.contiguous()

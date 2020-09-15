@@ -9,5 +9,8 @@ class TestOptions(BaseOptions):
         self.parser.add_argument('--aspect_ratio', type=float, default=1.0, help='aspect ratio of result images')
         self.parser.add_argument('--phase', type=str, default='test', help='train, val, test, etc')
         self.parser.add_argument('--which_epoch', type=str, default='latest', help='which epoch to load? set to latest to use latest cached model')
-        self.parser.add_argument('--how_many', type=int, default=112122, help='how many test images to run')
+        self.parser.add_argument('--how_many', type=int, default=1000, help='how many test images to run')
+        self.parser.add_argument('--alpha_bone', type=float, default=1.0, help='the weight of probability for bone')
+        self.parser.add_argument('--alpha_lung', type=float, default=1.0, help='the weight of probability for lung')
+        self.parser.add_argument('--alpha_other', type=float, default=1.0, help='the weight of probability for other components')
         self.isTrain = False
