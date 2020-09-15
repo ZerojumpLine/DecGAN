@@ -2,7 +2,8 @@
 ## Requirements 
 
 ```
-pytorch==1.1.0
+pytorch=0.3.1
+visdom=0.1.8.5
 ```
 
 ## Introduction 
@@ -24,11 +25,11 @@ For example, it can be applied to bone suppression or lung enhancement by changi
 
 ## Data
 
-Please download the data and put it in `./dataset/`. We provide the processed DRR pairs and Chest X-rays (CXRs) from Shenzhen Hospital X-ray Set. Similar experiments can be easily adapated to other datasets such as ChestX-ray14 (by subtituting the CXRs from Shenzhen Hospital X-ray Set). Remember to set less training epoches for ChestX-ray14 because of much more cases (i.e. --niter 5 --niter_decay 5 --lr_decay 3).
+Please download the [data](https://drive.google.com/file/d/1lxDMy4XejkH7HaG4Lpsf76Yz3DyetWtt/view?usp=sharing) and put it in `./dataset/`. We provide the processed DRR pairs and Chest X-rays (CXRs) from Shenzhen Hospital X-ray Set. Similar experiments can be easily adapated to other datasets such as ChestX-ray14 (by subtituting the CXRs from Shenzhen Hospital X-ray Set). Remember to set less training epoches for ChestX-ray14 because of much more cases (i.e. --niter 5 --niter_decay 5 --lr_decay 3).
 
 ## Test
 
-Download the pretrained model, and put it in `./checkpoints/`. Run the script, you can modulate your CXR by chaning the alphas! For example, if we want to suppress bone region:
+Download the pretrained model ([Shenzhen](https://drive.google.com/file/d/1szviIVGRtmnAlJ9EvFyUaUgl9CJO4Bq9/view?usp=sharing) or [ChestX14](https://drive.google.com/file/d/1DY-EK7Wjc4m5GQeF_MJ5TzVIMTnhi-q0/view?usp=sharing)), and put it in `./checkpoints/`. Run the script, you can modulate your CXR by chaning the alphas! For example, if we want to suppress bone region:
 
 ```
 python test_DecGAN.py --dataroot ./dataset/ --name DecGAN_SZ --results_dir ./results --alpha_bone 0 --alpha_lung 1 --alpha_other 1 --gpu_ids 0
