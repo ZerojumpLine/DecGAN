@@ -8,9 +8,9 @@ import scipy.io as sio
 import numpy as np
 
 
-class CycleGANModel(BaseModel):
+class DecGANModel(BaseModel):
     def name(self):
-        return 'CycleGANModel'
+        return 'DecGANModel'
 
     def initialize(self, opt):
         BaseModel.initialize(self, opt)

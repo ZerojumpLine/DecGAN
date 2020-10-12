@@ -6,9 +6,9 @@ from .base_model import BaseModel
 from . import networks
 
 
-class CycleGANModel(BaseModel):
+class DecModel(BaseModel):
     def name(self):
-        return 'CycleGANModel'
+        return 'DecModel'
 
     def initialize(self, opt):
         BaseModel.initialize(self, opt)

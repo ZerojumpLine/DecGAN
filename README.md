@@ -45,10 +45,10 @@ python -m visdom.server
 
 ### 1. Train the decomposition network G_Dec using DRR generated from LIDC-IDRI
 
-Because G_Dec is trained with range [-1, 1] but DecGAN IO implies [0, 1], we should modify some preprocessing functions to train G_Dec. (I know it is dummy, it can be done better) I leave some noted in the following files:
+Because G_Dec is trained with range [0, 1] (to make sure different components have positive values, making it more feasible to reconstruct with different alphas) but DecGAN IO implies [-1, 1] (with tanh), we should modify some preprocessing functions to train G_Dec. (I know it is dummy, it can be done better) I leave some notes in the following files:
 
-- Comments out all the transformless related code (7 lines in total) in `./data/unaligned_dataset.py`
-- Change the visualization output in `./util/util.py/tensor2im`
+- Comments out all the function "transformless" related code (7 lines in total) in `./data/unaligned_dataset.py`
+- Change the visualization output in `./util/util.py/tensor2im` (to ```image_numpy = np.transpose(image_numpy, (1, 2, 0)) * 255.0```)
 
 ```
 python train_G_Dec.py --dataroot ./dataset/ --name G_Dec --batchSize 20 --niter 200 --niter_decay 200 --lr_decay_iters 100 --model G_dec --gpu_ids 0

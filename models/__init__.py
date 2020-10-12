@@ -1,15 +1,13 @@
 def create_model(opt):
     model = None
-    if opt.model == 'cycle_gan':
+    if opt.model == 'dec_gan':
         assert(opt.dataset_mode == 'unaligned')
-        from .cycle_gan_model import CycleGANModel
-        # from .Dec_model import CycleGqANModel
-        model = CycleGANModel()
+        from .dec_gan_model import DecGANModel
+        model = DecGANModel()
     elif opt.model == 'G_dec':
         assert(opt.dataset_mode == 'unaligned')
-        from .cycle_gan_model_pre import CycleGANModel
-        # from .Dec_model import CycleGqANModel
-        model = CycleGANModel()
+        from .dec_model import DecModel
+        model = DecModel()
     elif opt.model == 'test':
         assert(opt.dataset_mode == 'single')
         from .test_model import TestModel
