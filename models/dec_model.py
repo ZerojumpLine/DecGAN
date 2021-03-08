@@ -22,14 +22,14 @@ class DecModel(BaseModel):
         self.visual_names = visual_names_A + visual_names_B
         # specify the models you want to save to the disk. The program will call base_model.save_networks and base_model.load_networks
         if self.isTrain:
-            self.model_names = ['S_B']
+            self.model_names = ['G_Dec']
         else:  # during test time, only load Gs
-            self.model_names = ['S_B']
+            self.model_names = ['G_Dec']
 
         # load/define networks
         # The naming conversion is different from those used in the paper
         # Code (paper): G_A (G), G_B (F), D_A (D_Y), D_B (D_X)
-        self.netS_B = networks.define_G(opt.input_nc, 3,
+        self.netG_Dec = networks.define_G(opt.input_nc, 3,
                                         opt.ngf, 'unet_32', opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids)
 
 
@@ -39,7 +39,7 @@ class DecModel(BaseModel):
             # define loss functions
             self.criterionDec = torch.nn.MSELoss()
             # initialize optimizers
-            self.optimizer_G = torch.optim.Adam(itertools.chain(self.netS_B.parameters()),
+            self.optimizer_G = torch.optim.Adam(itertools.chain(self.netG_Dec.parameters()),
                                                 lr=opt.lr, betas=(opt.beta1, 0.999))
             self.optimizers = []
             self.schedulers = []
@@ -50,8 +50,8 @@ class DecModel(BaseModel):
         if not self.isTrain or opt.continue_train:
             self.load_networks(opt.which_epoch)
             # print('continue training!')
-        #initial S_B
-        # self.load_networks_S_B('CP111')
+        #initial G_Dec
+        # self.load_networks_G_Dec('CP111')
         self.print_networks(opt.verbose)
 
     def set_input(self, input):
@@ -89,7 +89,7 @@ class DecModel(BaseModel):
         self.real_A = Variable(self.input_A)
         self.real_B = Variable(self.input_B)
 
-        self.decB, self.decBc = self.netS_B(self.real_B)
+        self.decB, self.decBc = self.netG_Dec(self.real_B)
 
         self.decB_bone = self.decB[:, 0, :, :]
         self.decB_bone.contiguous()
@@ -103,7 +103,7 @@ class DecModel(BaseModel):
 
 
     def backward_G(self):
-        self.decB, self.decBc = self.netS_B(self.real_B)
+        self.decB, self.decBc = self.netG_Dec(self.real_B)
 
         self.decB_bone = self.decB[:,0,:,:]
         self.decB_bone.contiguous()
