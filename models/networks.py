@@ -10,18 +10,28 @@ from .unet_parts import *
 # Helper Functions
 ###############################################################################
 
-
+#旧版weight 放在新版本torch中，下面代码会 说要加track runcining states
+# def get_norm_layer(norm_type='instance'):
+#     if norm_type == 'batch':
+#         norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
+#     elif norm_type == 'instance':
+#         norm_layer = functools.partial(nn.InstanceNorm2d, affine=False)
+#     elif norm_type == 'none':
+#         norm_layer = None
+#     else:
+#         raise NotImplementedError('normalization layer [%s] is not found' % norm_type)
+#     return norm_layer
+#新torch方法
 def get_norm_layer(norm_type='instance'):
     if norm_type == 'batch':
-        norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
+        norm_layer = functools.partial(nn.BatchNorm2d, affine=True,track_running_stats=True)
     elif norm_type == 'instance':
-        norm_layer = functools.partial(nn.InstanceNorm2d, affine=False)
+        norm_layer = functools.partial(nn.InstanceNorm2d, affine=False,track_running_stats=True)
     elif norm_type == 'none':
         norm_layer = None
     else:
         raise NotImplementedError('normalization layer [%s] is not found' % norm_type)
     return norm_layer
-
 
 def get_scheduler(optimizer, opt):
     if opt.lr_policy == 'lambda':

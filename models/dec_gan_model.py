@@ -95,14 +95,14 @@ class DecGANModel(BaseModel):
             input_X = input['X']  # 1,2,255,255
             input_E = input['E']
             if len(self.gpu_ids) > 0:
-                input_X = input_X.cuda(self.gpu_ids[0], async=True)
-                input_E = input_E.cuda(self.gpu_ids[0], async=True)
+                input_X = input_X.cuda(self.gpu_ids[0])
+                input_E = input_E.cuda(self.gpu_ids[0])
             self.input_X = input_X
             self.input_E = input_E
 
         if len(self.gpu_ids) > 0:
-            input_A = input_A.cuda(self.gpu_ids[0], async=True)
-            input_B = input_B.cuda(self.gpu_ids[0], async=True)
+            input_A = input_A.cuda(self.gpu_ids[0])
+            input_B = input_B.cuda(self.gpu_ids[0])
         self.input_A = input_A
         self.input_B = input_B
 
@@ -135,7 +135,7 @@ class DecGANModel(BaseModel):
 
         self.postdecAt = np.zeros([self.decA.shape[0], 3, self.decA.shape[2], self.decA.shape[3]])
         self.postdecAt = torch.FloatTensor(self.postdecAt)
-        self.postdecAt = self.postdecAt.cuda(self.gpu_ids[0], async=True)
+        self.postdecAt = self.postdecAt.cuda(self.gpu_ids[0])
         self.postdecAt = Variable(self.postdecAt)
         self.postdecAt[:, 0, :, :] = self.postdecA
         self.postdecAt[:, 1, :, :] = self.postdecAlung
@@ -145,7 +145,7 @@ class DecGANModel(BaseModel):
 
         self.postdecAtp = np.zeros([self.decA.shape[0], 3, self.decA.shape[2], self.decA.shape[3]])
         self.postdecAtp = torch.FloatTensor(self.postdecAtp)
-        self.postdecAtp = self.postdecAtp.cuda(self.gpu_ids[0], async=True)
+        self.postdecAtp = self.postdecAtp.cuda(self.gpu_ids[0])
         self.postdecAtp = Variable(self.postdecAtp)
         self.postdecAtp[:, 0, :, :] = self.postdecA * alpha_bone
         self.postdecAtp[:, 1, :, :] = self.postdecAlung * alpha_lung
@@ -221,7 +221,7 @@ class DecGANModel(BaseModel):
 
         self.postdecAt = np.zeros([self.decA.shape[0], 3, self.decA.shape[2], self.decA.shape[3]])
         self.postdecAt = torch.FloatTensor(self.postdecAt)
-        self.postdecAt = self.postdecAt.cuda(self.gpu_ids[0], async=True)
+        self.postdecAt = self.postdecAt.cuda(self.gpu_ids[0])
         self.postdecAt = Variable(self.postdecAt)
         self.postdecAt[:, 0, :, :] = self.postdecA
         self.postdecAt[:, 1, :, :] = self.postdecAlung
@@ -254,7 +254,7 @@ class DecGANModel(BaseModel):
         # mask loss
         self.postdecAtp = np.zeros([self.decA.shape[0], 3, self.decA.shape[2], self.decA.shape[3]])
         self.postdecAtp = torch.FloatTensor(self.postdecAtp)
-        self.postdecAtp = self.postdecAtp.cuda(self.gpu_ids[0], async=True)
+        self.postdecAtp = self.postdecAtp.cuda(self.gpu_ids[0])
         self.postdecAtp = Variable(self.postdecAtp)
         # self.postdecAtp[:, 0, :, :] = self.postdecA
         self.postdecAtp[:, 1, :, :] = self.postdecAlung

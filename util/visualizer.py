@@ -4,8 +4,9 @@ import ntpath
 import time
 from . import util
 from . import html
-from scipy.misc import imresize
-
+# from scipy.misc import imresize
+from PIL import Image
+import numpy as np
 
 class Visualizer():
     def __init__(self, opt):
@@ -105,6 +106,12 @@ class Visualizer():
             self.plot_data = {'X': [], 'Y': [], 'legend': list(losses.keys())}
         self.plot_data['X'].append(epoch + counter_ratio)
         self.plot_data['Y'].append([util.tensor2float(losses[k]) for k in self.plot_data['legend']])
+        # for k in self.plot_data['legend']: #
+        #     self.plot_data['Y'].append(util.tensor2float(losses[k]))
+        tem_X=np.stack([np.array(self.plot_data['X'])] * len(self.plot_data['legend']), 1)
+        tem_Y=np.array(self.plot_data['Y'])
+        if tem_X.shape != tem_Y.shape:
+            print('a')
         self.vis.line(
             X=np.stack([np.array(self.plot_data['X'])] * len(self.plot_data['legend']), 1),
             Y=np.array(self.plot_data['Y']),
@@ -141,9 +148,38 @@ class Visualizer():
             save_path = os.path.join(image_dir, image_name)
             h, w, _ = im.shape
             if aspect_ratio > 1.0:
-                im = imresize(im, (h, int(w * aspect_ratio)), interp='bicubic')
+                # im = imresize(im, (h, int(w * aspect_ratio)), interp='bicubic')
+                im = np.array(Image.fromarray(im).resize((h, int(w * aspect_ratio))))
             if aspect_ratio < 1.0:
-                im = imresize(im, (int(h / aspect_ratio), w), interp='bicubic')
+                # im = imresize(im, (int(h / aspect_ratio), w), interp='bicubic')
+                im = np.array(Image.fromarray(im).resize((int(h / aspect_ratio), w)))
+            util.save_image(im, save_path)
+
+            ims.append(image_name)
+            txts.append(label)
+            links.append(image_name)
+        webpage.add_images(ims, txts, links, width=self.win_size)
+
+    def PCL_save_images(self, webpage, visuals, image_path, result_dir,aspect_ratio=1.0):
+        # image_dir = webpage.get_image_dir()
+        short_path = ntpath.basename(image_path[0])
+        name = os.path.splitext(short_path)[0]
+
+        webpage.add_header(name)
+        ims, txts, links = [], [], []
+
+        for label, im_data in visuals.items():
+            im = util.tensor2im(im_data)
+            image_name = '%s_%s.png' % (name, label)
+            # image_name = '%s.png' % (name)
+            save_path = os.path.join(result_dir, image_name)
+            h, w, _ = im.shape
+            if aspect_ratio > 1.0:
+                # im = imresize(im, (h, int(w * aspect_ratio)), interp='bicubic')
+                im = np.array(Image.fromarray(im).resize((h, int(w * aspect_ratio))))
+            if aspect_ratio < 1.0:
+                # im = imresize(im, (int(h / aspect_ratio), w), interp='bicubic')
+                im = np.array(Image.fromarray(im).resize((int(h / aspect_ratio), w)))
             util.save_image(im, save_path)
 
             ims.append(image_name)

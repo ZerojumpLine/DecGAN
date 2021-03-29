@@ -63,8 +63,8 @@ class DecModel(BaseModel):
 
 		
         if len(self.gpu_ids) > 0:
-            input_A = input_A.cuda(self.gpu_ids[0], async=True)
-            input_B = input_B.cuda(self.gpu_ids[0], async=True)	
+            input_A = input_A.cuda(self.gpu_ids[0])
+            input_B = input_B.cuda(self.gpu_ids[0])
         self.input_A = input_A
         self.input_B = input_B
 
@@ -72,8 +72,8 @@ class DecModel(BaseModel):
             input_X = input['X']  # 1,2,255,255
             input_E = input['E']
             if len(self.gpu_ids) > 0:
-                input_X = input_X.cuda(self.gpu_ids[0], async=True)
-                input_E = input_E.cuda(self.gpu_ids[0], async=True)
+                input_X = input_X.cuda(self.gpu_ids[0])
+                input_E = input_E.cuda(self.gpu_ids[0])
             self.input_X = input_X
             self.input_E = input_E
 

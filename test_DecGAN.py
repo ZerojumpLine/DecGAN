@@ -30,7 +30,8 @@ if __name__ == '__main__':
         model.test(opt.alpha_bone, opt.alpha_lung, opt.alpha_other)
         visuals = model.get_current_visuals()
         img_path = model.get_image_paths()
-        print('%04d: process image... %s' % (i, img_path))
+        # print('%04d: process image... %s' % (i, img_path))
         visualizer.save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio)
+        # visualizer.PCL_save_images(webpage, visuals, img_path,opt.results_dir, aspect_ratio=opt.aspect_ratio)
 
     webpage.save()

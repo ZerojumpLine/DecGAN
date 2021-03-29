@@ -2,7 +2,7 @@
 ## Requirements 
 
 ```
-pytorch==0.3.1
+pytorch==1.6.0
 visdom==0.1.8.5
 ```
 
