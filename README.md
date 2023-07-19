@@ -69,7 +69,7 @@ python train_DecGAN.py --dataroot ./dataset/ --name DecGAN_SZ --batchSize 2 --gp
 This code borrows heavily from [CycleGAN](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) and [Unet](https://github.com/milesial/Pytorch-UNet).
 
 ## Citation
-If you find our work has positively influenced your projects, please kindly consider to cite our work:
+If you find our work has positively influenced your projects, please kindly consider citing our work:
 
 ```
 @article{li2020high,
